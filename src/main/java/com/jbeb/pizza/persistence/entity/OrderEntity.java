@@ -3,6 +3,7 @@ package com.jbeb.pizza.persistence.entity;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "pizza_order")
@@ -28,5 +29,18 @@ public class OrderEntity {
 
     @Column(name = "additional_notes", length = 200)
     private String additionalNotes;
+
+
+    // Relacion de OrderEntity con CustomerEntity
+    // OneToOne. Una orden solo tiene un cliente
+    @OneToOne
+    @JoinColumn(name = "id_customer", referencedColumnName = "id_customer", insertable = false, updatable = false)
+    private CustomerEntity customer;
+
+    // Relacion de OrderEntity con OrderItemEntity
+    // OneToMany. Muchos item pueden estar en una sola orden. Por lo que se usa un List de OrderItemEntity
+    // mappedBy se indica el nombre del atributo donde esta la otra relacion ManyToOne con este Entity
+    @OneToMany(mappedBy = "order")
+    private List<OrderItemEntity> items;
 
 }

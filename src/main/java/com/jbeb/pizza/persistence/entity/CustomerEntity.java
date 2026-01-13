@@ -15,7 +15,7 @@ public class CustomerEntity {
     // El id no se crea automaticamente, se asigna manualmente
     @Id
     @Column(name = "id_customer", nullable = false, length = 15)
-    private Integer idCustomer;
+    private String idCustomer;
 
     @Column(nullable = false, length = 60)
     private String name;
