@@ -4,10 +4,7 @@ import com.jbeb.pizza.persistence.entity.PizzaEntity;
 import com.jbeb.pizza.service.PizzaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -35,4 +32,26 @@ public class PizzaController {
         return ResponseEntity.ok(this.pizzaService.getById(idPizza));
     }
 
+    // Endpoint para guardar una pizza que recibe en el cuerpo de la peticion
+    @PostMapping
+    public ResponseEntity<PizzaEntity> add(@RequestBody PizzaEntity pizza){
+        // Si el idPizza es null o la pizza no existe
+        if (pizza.getIdPizza() == null || !this.pizzaService.exists(pizza.getIdPizza())){
+            return ResponseEntity.ok(this.pizzaService.save(pizza));
+        }
+        // En caso de que la pizza ya exista
+        return ResponseEntity.badRequest().build();
+    }
+
+    // Endpoint para actualizar una pizza
+    @PutMapping
+    public ResponseEntity<PizzaEntity> update(@RequestBody PizzaEntity pizza){
+        // Si el idPizza es diferente de null Y la pizza ya existe
+        // Siempre se llama el metodo save, internamente los Spring Repository detectan si es un INSERT de una
+        // pizza nueva o se quiere actualizar
+        if (pizza.getIdPizza() != null && this.pizzaService.exists(pizza.getIdPizza())){
+            return ResponseEntity.ok(this.pizzaService.save(pizza));
+        }
+        return ResponseEntity.badRequest().build();
+    }
 }
