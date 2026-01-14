@@ -1,9 +1,8 @@
 package com.jbeb.pizza.service;
 
 import com.jbeb.pizza.persistence.entity.PizzaEntity;
+import com.jbeb.pizza.persistence.repository.PizzaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,20 +10,23 @@ import java.util.List;
 @Service
 public class PizzaService {
 
-    // JdbcTemplate para hacer consultas a la BD
     // Como se anoto como final, se agrega como parametro en un constructor
-    private final JdbcTemplate jdbcTemplate;
+    private final PizzaRepository pizzaRepository;
 
     //Constructor
     @Autowired
-    public PizzaService(JdbcTemplate jdbcTemplate){
-        this.jdbcTemplate = jdbcTemplate;
+    public PizzaService(PizzaRepository pizzaRepository){
+        this.pizzaRepository = pizzaRepository;
     }
 
     // Metodo para consultar todas las pizzas
-    // query() permite escribir consultas SQL desde Java y convertir el resultado en una clase Java
     public List<PizzaEntity> getAll(){
-        return this.jdbcTemplate.query("SELECT * FROM pizza", new BeanPropertyRowMapper<>(PizzaEntity.class));
+        return this.pizzaRepository.findAll();
+    }
+
+    // findById retorna un Optional, por lo que usamos orElse para indicar que retorne null si no encuentra nada
+    public PizzaEntity getById(int idPizza){
+        return this.pizzaRepository.findById(idPizza).orElse(null);
     }
 
 }

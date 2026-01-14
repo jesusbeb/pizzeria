@@ -2,8 +2,11 @@ package com.jbeb.pizza;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
+// Se habilita el uso de JpaRepositories en la app
 @SpringBootApplication
+@EnableJpaRepositories
 public class PizzeriaApplication {
 
 	public static void main(String[] args) {
