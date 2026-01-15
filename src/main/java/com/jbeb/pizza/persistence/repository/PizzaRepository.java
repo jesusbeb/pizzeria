@@ -14,4 +14,8 @@ public interface PizzaRepository extends ListCrudRepository<PizzaEntity, Integer
     // Consulta una pizza por nombre y que este disponible
     PizzaEntity findAllByAvailableTrueAndNameIgnoreCase(String name);
 
+    // Consulta todas las pizzas con un ingrediente especificado
+    List<PizzaEntity> findAllByAvailableTrueAndDescriptionContainingIgnoreCase(String description);
+
+    List<PizzaEntity> findAllByAvailableTrueAndDescriptionNotContainingIgnoreCase(String description);
 }
