@@ -1,5 +1,6 @@
 package com.jbeb.pizza.persistence.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -37,8 +38,14 @@ public class OrderItemEntity {
     // ManyToOne. Una orden puede tener muchos items
     // Indicamos el nombre de la columna con la que ocurre el Join
     // Con insertable y updatable evitamos que se actualicen elementos en OrderEntity a traves de esta relacion
+    // @JsonIgnore evita el error de llamado infinito, ya que en OrderEntity hay una relacion con OrderItemEntity al
+    // construir todos los items que tiene un order. El problema esta aqui en OrderItemEntity con la relacion que se
+    // tiene con OrderEntity; al construir el Json del item trata al mismo tiempo de construir el Json de Order, y el
+    // del Order vuelve y llama al del item, con lo que se vuelve un llamado infinito. Este error se evita creando DTO's
+    // o clase de Dominio para no exponer los Entities en un servicio REST, en este caso por temas practicos solo evitaremos el error con JsonIgnore
     @ManyToOne
     @JoinColumn(name = "id_order", referencedColumnName = "id_order", insertable = false, updatable = false)
+    @JsonIgnore
     private OrderEntity order;
 
     // Relacion de OrderItemEntity PizzaEntity

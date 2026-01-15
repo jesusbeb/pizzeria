@@ -1,12 +1,19 @@
 package com.jbeb.pizza.persistence.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
 @Table(name = "pizza_order")
+@Getter
+@Setter
+@NoArgsConstructor
 public class OrderEntity {
 
     @Id
@@ -33,14 +40,20 @@ public class OrderEntity {
 
     // Relacion de OrderEntity con CustomerEntity
     // OneToOne. Una orden solo tiene un cliente
-    @OneToOne
+    // JsonIgnore hace que no se muestre la informacion del cliente al consultar una orden, sin embargo internamente la
+    // consulta a la BD se sigue haciendo
+    // FetchType.LAZY hace que no cargue los datos de esta relacion (informacion del cliente) hasta que se use, por lo
+    // que no ya no se hace la consulta a la BD
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_customer", referencedColumnName = "id_customer", insertable = false, updatable = false)
+    @JsonIgnore
     private CustomerEntity customer;
 
     // Relacion de OrderEntity con OrderItemEntity
     // OneToMany. Muchos item pueden estar en una sola orden. Por lo que se usa un List de OrderItemEntity
     // mappedBy se indica el nombre del atributo donde esta la otra relacion ManyToOne con este Entity
-    @OneToMany(mappedBy = "order")
+    // FetchType.EAGER hara que cuando se quiera recuperar un OrderEntity, automaticamente traiga esta relacion
+    @OneToMany(mappedBy = "order", fetch = FetchType.EAGER)
     private List<OrderItemEntity> items;
 
 }
