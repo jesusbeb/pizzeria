@@ -24,9 +24,17 @@ public class PizzaService {
         return this.pizzaRepository.findAll();
     }
 
+    public List<PizzaEntity> getAvailable(){
+        return this.pizzaRepository.findAllByAvailableTrueOrderByPrice();
+    }
+
     // findById retorna un Optional, por lo que usamos orElse para indicar que retorne null si no encuentra nada
     public PizzaEntity getById(int idPizza){
         return this.pizzaRepository.findById(idPizza).orElse(null);
+    }
+
+    public PizzaEntity getByName(String name){
+        return this.pizzaRepository.findAllByAvailableTrueAndNameIgnoreCase(name);
     }
 
     public PizzaEntity save(PizzaEntity pizza){

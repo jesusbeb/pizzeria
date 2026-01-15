@@ -32,6 +32,17 @@ public class PizzaController {
         return ResponseEntity.ok(this.pizzaService.getById(idPizza));
     }
 
+    // Recibimos el name en otro path para no confundir a Spring
+    @GetMapping("/name/{name}")
+    public ResponseEntity<PizzaEntity> getByName(@PathVariable String name){
+        return ResponseEntity.ok(this.pizzaService.getByName(name));
+    }
+
+    @GetMapping("/available")
+    public ResponseEntity<List<PizzaEntity>> getAvailable(){
+        return ResponseEntity.ok(this.pizzaService.getAvailable());
+    }
+
     // Endpoint para guardar una pizza que recibe en el cuerpo de la peticion
     @PostMapping
     public ResponseEntity<PizzaEntity> add(@RequestBody PizzaEntity pizza){
