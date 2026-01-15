@@ -5,11 +5,19 @@ import com.jbeb.pizza.persistence.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
 public class OrderService {
     private final OrderRepository orderRepository;
+
+    // Constantes con el valor que puede tener el atributo method de OrderEntity
+    private static final String DELIVERY = "D";
+    private static final String CARRYOUT = "C";
+    private static final String ON_SITE = "S";
 
     @Autowired
     public OrderService(OrderRepository orderRepository){
@@ -23,4 +31,17 @@ public class OrderService {
         orders.forEach(o -> System.out.println(o.getCustomer().getName()));
         return orders;
     }
+
+    public List<OrderEntity> getTodayOrders(){
+        LocalDateTime today = LocalDate.now().atTime(0,0); // Crea una fecha actual con la hora 0 y minuto 0
+        return this.orderRepository.findAllByDateAfter(today);
+    }
+
+    // Metodo para obtener las ordenes que fueron para llevar o entregar en domicilio
+    // Se crea un List con las coincidencias a buscar
+    public List<OrderEntity> getOutsideOrders(){
+        List<String> methods = Arrays.asList(DELIVERY, CARRYOUT);
+        return this.orderRepository.findAllByMethodIn(methods);
+    }
+
 }
