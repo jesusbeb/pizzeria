@@ -33,6 +33,10 @@ public class PizzaService {
         return this.pizzaRepository.save(pizza);
     }
 
+    public void delete(int idPizza){
+        this.pizzaRepository.deleteById(idPizza);
+    }
+
     // Metodo para comprobar si una pizza ya existe
     public boolean exists(int idPizza){
         return this.pizzaRepository.existsById(idPizza);
