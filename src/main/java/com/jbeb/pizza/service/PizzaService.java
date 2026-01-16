@@ -35,7 +35,11 @@ public class PizzaService {
     }
 
     public PizzaEntity getByName(String name){
-        return this.pizzaRepository.findAllByAvailableTrueAndNameIgnoreCase(name);
+        // Otras formas de retornar un Pizza Entity cuando se recibe un Optional
+        // return this.pizzaRepository.findFirstByAvailableTrueAndNameIgnoreCase(name).orElse(null); // retornar un null si no se encuentra nada
+        // return this.pizzaRepository.findFirstByAvailableTrueAndNameIgnoreCase(name).orElseThrow(); // Lanzar una excepcion
+        // Lanzamos una excepcion con programacion funcional e imprimimos en consola el error
+        return this.pizzaRepository.findFirstByAvailableTrueAndNameIgnoreCase(name).orElseThrow( () -> new RuntimeException("La pizza no existe") );
     }
 
     public List<PizzaEntity> getWith(String ingredient){
@@ -44,6 +48,11 @@ public class PizzaService {
 
     public List<PizzaEntity> getWithout(String ingredient){
         return this.pizzaRepository.findAllByAvailableTrueAndDescriptionNotContainingIgnoreCase(ingredient);
+    }
+
+    // Metodo que retorna las tres pizzas mas baratas de un precio que se indique
+    public List<PizzaEntity> getCheapest(double price) {
+        return this.pizzaRepository.findTop3ByAvailableTrueAndPriceLessThanEqualOrderByPriceAsc(price);
     }
 
     public PizzaEntity save(PizzaEntity pizza){
