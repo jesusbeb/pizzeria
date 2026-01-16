@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,9 +34,16 @@ public class PizzaService {
         return this.pizzaPagSortRepository.findAll(pageRequest);
     }
 
-    public List<PizzaEntity> getAvailable(){
+    // Metodo para consultar todas las pizzas disponibles. Retorna un Page
+    // Recibe como parametro la pagina a consultar, el numero de elementos a mostrar, a traves de que propiedad se
+    // ordenara y si sera ascendente o descendente.
+    public Page<PizzaEntity> getAvailable(int page, int elements, String sortBy, String sortDirection){
         System.out.println("Pizzas veganas disponibles: "+this.pizzaRepository.countByVeganTrue()); // Imprimimos en consola
-        return this.pizzaRepository.findAllByAvailableTrueOrderByPrice();
+
+        // sortBy recibe una direccion de ordenamiento (ASC o DESC) y la propiedad a traves de la cual se ordenara
+        Sort sort = Sort.by(Sort.Direction.fromString(sortDirection), sortBy);
+        Pageable pageRequest = PageRequest.of(page, elements, sort);
+        return this.pizzaPagSortRepository.findByAvailableTrue(pageRequest);
     }
 
     // findById retorna un Optional, por lo que usamos orElse para indicar que retorne null si no encuentra nada

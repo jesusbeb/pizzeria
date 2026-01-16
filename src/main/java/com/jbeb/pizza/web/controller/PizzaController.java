@@ -58,9 +58,14 @@ public class PizzaController {
         return ResponseEntity.ok(this.pizzaService.getCheapest(price));
     }
 
+    // http://localhost:8080/api/pizzas/available?sortBy=price&sortDirection=DESC -> Path donde indicamos a traves de
+    // que columna se ordenara y si sera ASC o DESC, no enviamos page ni elements, asi que tomara los valores por defecto
     @GetMapping("/available")
-    public ResponseEntity<List<PizzaEntity>> getAvailable(){
-        return ResponseEntity.ok(this.pizzaService.getAvailable());
+    public ResponseEntity<Page<PizzaEntity>> getAvailable(@RequestParam(defaultValue = "0") int page,
+                                                          @RequestParam(defaultValue = "8") int elements,
+                                                          @RequestParam(defaultValue = "price") String sortBy,
+                                                          @RequestParam(defaultValue = "ASC") String sortDirection){
+        return ResponseEntity.ok(this.pizzaService.getAvailable(page, elements, sortBy, sortDirection));
     }
 
     // Endpoint para guardar una pizza que recibe en el cuerpo de la peticion

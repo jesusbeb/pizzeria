@@ -1,9 +1,15 @@
 package com.jbeb.pizza.persistence.repository;
 
 import com.jbeb.pizza.persistence.entity.PizzaEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.ListPagingAndSortingRepository;
 
 public interface PizzaPagSortRepository extends ListPagingAndSortingRepository<PizzaEntity, Integer> {
+
+    // Consulta que retorna una pagina con todas las pizzas disponibles. findBy funciona igual que findAllBy
+    Page<PizzaEntity> findByAvailableTrue(Pageable pageable);
+
 }
 
 
