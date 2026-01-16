@@ -1,8 +1,12 @@
 package com.jbeb.pizza.service;
 
 import com.jbeb.pizza.persistence.entity.PizzaEntity;
+import com.jbeb.pizza.persistence.repository.PizzaPagSortRepository;
 import com.jbeb.pizza.persistence.repository.PizzaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,16 +16,21 @@ public class PizzaService {
 
     // Como se anoto como final, se agrega como parametro en un constructor
     private final PizzaRepository pizzaRepository;
+    private final PizzaPagSortRepository pizzaPagSortRepository;
 
     //Constructor
     @Autowired
-    public PizzaService(PizzaRepository pizzaRepository){
+    public PizzaService(PizzaRepository pizzaRepository, PizzaPagSortRepository pizzaPagSortRepository){
         this.pizzaRepository = pizzaRepository;
+        this.pizzaPagSortRepository = pizzaPagSortRepository;
     }
 
-    // Metodo para consultar todas las pizzas
-    public List<PizzaEntity> getAll(){
-        return this.pizzaRepository.findAll();
+    // Metodo para consultar todas las pizzas. Retorna un Page (página)
+    // PageRequest.of recibe el numero de pagina que queremos ver y el numero de elementos que se mostraran (las
+    // paginas siempre empiezan desde cero)
+    public Page<PizzaEntity> getAll(int page, int elements){
+        Pageable pageRequest = PageRequest.of(page, elements);
+        return this.pizzaPagSortRepository.findAll(pageRequest);
     }
 
     public List<PizzaEntity> getAvailable(){

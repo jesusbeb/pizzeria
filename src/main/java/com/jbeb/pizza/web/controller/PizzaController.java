@@ -3,6 +3,7 @@ package com.jbeb.pizza.web.controller;
 import com.jbeb.pizza.persistence.entity.PizzaEntity;
 import com.jbeb.pizza.service.PizzaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,9 +22,13 @@ public class PizzaController {
     }
 
     // Endpoint
+    // Se reciben como parametros el numero de pagina que se consultara y el numero de elementos a mostrar por pagina
+    // @RequestParam porque viajan como parametros de la peticion (p.e. http://localhost:8080/api/pizzas?page=0&elements=15)
+    // defaultValue asigna valores por default
     @GetMapping
-    public ResponseEntity<List<PizzaEntity>> getAll(){
-        return ResponseEntity.ok(this.pizzaService.getAll());
+    public ResponseEntity<Page<PizzaEntity>> getAll(@RequestParam(defaultValue = "0") int page,
+                                                    @RequestParam(defaultValue = "8") int elements){
+        return ResponseEntity.ok(this.pizzaService.getAll(page, elements));
     }
 
     // Endpoint, recibe el id en el path
