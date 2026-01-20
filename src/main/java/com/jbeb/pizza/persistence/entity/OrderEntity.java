@@ -53,7 +53,9 @@ public class OrderEntity {
     // OneToMany. Muchos item pueden estar en una sola orden. Por lo que se usa un List de OrderItemEntity
     // mappedBy se indica el nombre del atributo donde esta la otra relacion ManyToOne con este Entity
     // FetchType.EAGER hara que cuando se quiera recuperar un OrderEntity, automaticamente traiga esta relacion
+    // @OrderBy ordenara los items de un Order en forma ASC o DESC segun el atributo de OrderItemEntity que se le indique
     @OneToMany(mappedBy = "order", fetch = FetchType.EAGER)
+    @OrderBy("price ASC")
     private List<OrderItemEntity> items;
 
 }

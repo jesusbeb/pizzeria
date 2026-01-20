@@ -44,4 +44,9 @@ public class OrderService {
         return this.orderRepository.findAllByMethodIn(methods);
     }
 
+    // Metodo para obtener las ordenes de un cliente especificado por su id
+    public List<OrderEntity> getCustomerOrders(String idCustomer){
+        return this.orderRepository.findCustomerOrders(idCustomer);
+    }
+
 }

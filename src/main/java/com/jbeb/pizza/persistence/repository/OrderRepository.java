@@ -1,7 +1,9 @@
 package com.jbeb.pizza.persistence.repository;
 
 import com.jbeb.pizza.persistence.entity.OrderEntity;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.ListCrudRepository;
+import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -15,5 +17,10 @@ public interface OrderRepository extends ListCrudRepository<OrderEntity, Integer
     // Consultar ordenes por el atributo method que indica si la orden se consumio en el negocio, para llevar o para entrega
     // Como se usa el keyword "In" se debe recibir un List de tipo String que es el tipo del atributo method
     List<OrderEntity> findAllByMethodIn(List<String> methods);
+
+    // @Query para consultas con SQL nativos.
+    // Consulta para saber las ordenes que ha tenido un cliente en especifico
+    @Query(value = "SELECT * FROM pizza_order WHERE id_customer = :id", nativeQuery = true)
+    List<OrderEntity> findCustomerOrders(@Param("id") String idCustomer);
 
 }
