@@ -1,6 +1,7 @@
 package com.jbeb.pizza.service;
 
 import com.jbeb.pizza.persistence.entity.OrderEntity;
+import com.jbeb.pizza.persistence.projection.OrderSummary;
 import com.jbeb.pizza.persistence.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -47,6 +48,11 @@ public class OrderService {
     // Metodo para obtener las ordenes de un cliente especificado por su id
     public List<OrderEntity> getCustomerOrders(String idCustomer){
         return this.orderRepository.findCustomerOrders(idCustomer);
+    }
+
+    // Metodo para obtener un resumen de una orden por su id
+    public OrderSummary getSummary(int orderId){
+        return this.orderRepository.findSummary(orderId);
     }
 
 }
