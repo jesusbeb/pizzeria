@@ -4,13 +4,17 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+// @EntityListeners para indicar que pondremos Listeners en este Entity y sera el AuditingEntityListener. De esta manera
+// el Entity podra ser auditado. Extenderemos de la superclase creada AuditableEntity
 @Entity
 @Table(name = "pizza")
+@EntityListeners(AuditingEntityListener.class)
 @Getter // Lombok crea automaticamente los getters
 @Setter // Lombok crea automaticamente los setters
 @NoArgsConstructor // Lombok crea automaticamente un constructor sin parametros
-public class PizzaEntity {
+public class PizzaEntity extends AuditableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // IDENTITY aumenta de a 1
