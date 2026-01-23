@@ -1,20 +1,24 @@
 package com.jbeb.pizza.persistence.entity;
 
+import com.jbeb.pizza.persistence.audit.AuditPizzaListener;
+import com.jbeb.pizza.persistence.audit.AuditableEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-// @EntityListeners para indicar que pondremos Listeners en este Entity y sera el AuditingEntityListener. De esta manera
+import java.io.Serializable;
+
+// @EntityListeners para indicar que pondremos Listeners en este Entity y el nombre de los Listener.class. De esta manera
 // el Entity podra ser auditado. Extenderemos de la superclase creada AuditableEntity
 @Entity
 @Table(name = "pizza")
-@EntityListeners(AuditingEntityListener.class)
+@EntityListeners({AuditingEntityListener.class, AuditPizzaListener.class})
 @Getter // Lombok crea automaticamente los getters
 @Setter // Lombok crea automaticamente los setters
 @NoArgsConstructor // Lombok crea automaticamente un constructor sin parametros
-public class PizzaEntity extends AuditableEntity {
+public class PizzaEntity extends AuditableEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // IDENTITY aumenta de a 1
@@ -38,5 +42,19 @@ public class PizzaEntity extends AuditableEntity {
 
     @Column(columnDefinition = "TINYINT", nullable = false)
     private Boolean available;
+
+    // Implementamos toString para poder imprimir informacion del Entity
+    @Override
+    public String toString() {
+        return "PizzaEntity{" +
+                "idPizza=" + idPizza +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", price=" + price +
+                ", vegetarian=" + vegetarian +
+                ", vegan=" + vegan +
+                ", available=" + available +
+                '}';
+    }
 
 }
