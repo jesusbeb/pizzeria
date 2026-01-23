@@ -3,8 +3,10 @@ package com.jbeb.pizza.service;
 import com.jbeb.pizza.persistence.entity.OrderEntity;
 import com.jbeb.pizza.persistence.projection.OrderSummary;
 import com.jbeb.pizza.persistence.repository.OrderRepository;
+import com.jbeb.pizza.service.dto.RandomOrderDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -53,6 +55,12 @@ public class OrderService {
     // Metodo para obtener un resumen de una orden por su id
     public OrderSummary getSummary(int orderId){
         return this.orderRepository.findSummary(orderId);
+    }
+
+    // Metodo que guardara una orden aleatoria
+    @Transactional
+    public boolean saveRandomOrder(RandomOrderDto randomOrderDto) {
+        return this.orderRepository.saveRandomOrder(randomOrderDto.getIdCustomer(), randomOrderDto.getMethod());
     }
 
 }
